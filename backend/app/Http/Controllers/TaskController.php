@@ -13,6 +13,7 @@ class TaskController extends Controller
     public function index(Request $request): JsonResponse
     {
         $tasks = Task::query()
+            ->with(['assignedUser', 'creator', 'attachments'])
             ->when($request->query('status'), fn($query, $status) => $query->where('status', $status))
             ->when($request->query('priority'), fn($query, $priority) => $query->where('priority', $priority))
             ->orderBy(
